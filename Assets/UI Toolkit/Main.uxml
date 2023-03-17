@@ -1,0 +1,23 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI%20Toolkit/UnityThemes/style.uss?fileID=7433441132597879392&amp;guid=a501c1e8bd725461b8a7b790da1373c7&amp;type=3#style" />
+    <ui:VisualElement style="justify-content: center; align-items: center; flex-grow: 1; display: flex; visibility: visible;">
+        <ui:VisualElement style="flex-direction: column; background-color: rgba(0, 0, 0, 0.88); border-top-left-radius: 10px; border-bottom-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; padding-left: 10px; padding-right: 10px; padding-top: 10px; padding-bottom: 10px; align-items: stretch; width: 50%;">
+            <ui:DropdownField label="Quality" index="1" choices="High,Medium,Low" name="Quality" style="-unity-text-align: upper-center; display: none;" />
+            <ui:DropdownField label="Voice Direction" index="0" choices="Camera, Robot" name="SpatialDirection" style="justify-content: flex-start; -unity-text-align: upper-center; visibility: visible; display: none;" />
+            <ui:TextField picking-mode="Ignore" label="Name" value="Anonymous" text="Anonymous" name="AvatarName" style="position: relative; flex-direction: row; background-color: rgba(0, 0, 0, 0); top: auto; max-width: none; color: rgb(255, 255, 255); -unity-text-align: upper-left; -unity-text-outline-color: rgb(0, 0, 0); -unity-font-style: normal;" />
+            <ui:TextField picking-mode="Ignore" label="Conference" text="Unity" name="ConferenceName" value="Unity" style="position: relative; flex-direction: row; background-color: rgba(0, 0, 0, 0); top: auto; max-width: none; color: rgb(255, 255, 255); -unity-text-align: upper-left; -unity-text-outline-color: rgb(0, 0, 0);" />
+            <ui:DropdownField label="Audio Input" index="-1" choices="System.Collections.Generic.List`1[System.String]" name="AudioInput" />
+            <ui:VisualElement style="flex-direction: row; align-items: flex-start; justify-content: center; margin-top: 10px;">
+                <ui:Button text="Join" display-tooltip-when-elided="true" name="JoinButton" />
+                <ui:Button text="Leave" display-tooltip-when-elided="true" name="LeaveButton" />
+            </ui:VisualElement>
+            <ui:VisualElement style="flex-direction: row; flex-wrap: wrap; align-items: center; justify-content: center; margin-top: 20px;">
+                <ui:Label text="Video" display-tooltip-when-elided="true" style="flex-grow: 1;" />
+                <ui:Button text="Start" display-tooltip-when-elided="true" name="StartVideo" style="flex-shrink: 1;" />
+                <ui:Button text="Stop" display-tooltip-when-elided="true" name="StopVideo" style="flex-shrink: 1;" />
+            </ui:VisualElement>
+            <ui:Label text="Shortcuts:&#10;&#10;Esc: Press to show/hide the UI.&#10;WASD/ZQSD: Move your avatar.&#10;Hold Shift: Run.&#10;Space: Jump.&#10;Cmd+F: Toggle fullscreen.&#10;Cmd+Q: Quit." display-tooltip-when-elided="true" style="-unity-font-style: bold; margin-top: 20px;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+    <ui:Label text="Version" display-tooltip-when-elided="true" name="Version" style="position: absolute; left: auto; right: 10px; bottom: 10px;" />
+</ui:UXML>

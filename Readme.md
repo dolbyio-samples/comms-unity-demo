@@ -16,7 +16,7 @@ The configuration is done via a json file named `config.json` located at various
 ```json
 {
     "token_server_url": "",
-    "app_key": "",
+    "client_access_token": "",
 
     "pubnub": {
         "publish_key": "",
@@ -25,6 +25,15 @@ The configuration is done via a json file named `config.json` located at various
     }
 }
 ```
+
+You can use this file to configure the demo app to work with:
+
+1. Your own token generation server and provide the URL in `token_server_url`
+2. A Customer access token grabed from the [Dolby.io Dashboard](https://dashboard.dolby.io/)
+
+## Injecting Media
+
+If you need injecting media, whether it is audio or video, have a look to the [C++ SDK Media Injection Demo](https://github.com/dolbyio-samples/comms-cpp-injection-demo)
 
 ## Run
 

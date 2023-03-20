@@ -94,14 +94,14 @@ public class ApplicationManager : MonoBehaviour
 
     internal Configuration Configuration;
 
-    private async Task<string> GetToken(string appKey)
+    private async Task<string> GetToken()
     {
         return await Task.Run(async () => {
             string result = "";
 
-            if (!String.IsNullOrEmpty(appKey))
+            if (!String.IsNullOrEmpty(Configuration.TokenServerUrl))
             {
-                HttpResponseMessage response = await _client.GetAsync($"{Configuration.TokenServerUrl}/{appKey}");
+                HttpResponseMessage response = await _client.GetAsync($"{Configuration.TokenServerUrl}");
                 string jsonString = await response.Content.ReadAsStringAsync();
 
                 var token = JsonConvert.DeserializeObject<TokenJson>(jsonString);
@@ -109,7 +109,12 @@ public class ApplicationManager : MonoBehaviour
             } 
             else 
             {
-                Debug.LogError("Failed to fetch appKey");
+                result = Configuration.ClientAccessToken;
+            }
+
+            if (String.IsNullOrEmpty(result))
+            {
+                throw new Exception("Failed to fetch Access Token");
             }
 
             return result;
@@ -138,7 +143,7 @@ public class ApplicationManager : MonoBehaviour
     {
         try
         {
-            string token = await GetToken(Configuration.AppKey);
+            string token = await GetToken();
 
             await _sdk.SetLogLevelAsync(DolbyIO.Comms.LogLevel.Debug);
 
@@ -179,7 +184,7 @@ public class ApplicationManager : MonoBehaviour
 
     public string RefreshToken()
     {
-        return GetToken(Configuration.AppKey).Result;
+        return GetToken().Result;
     }
 
     public void OnActiveSpeakerChange(string conferenceId, int count, string[] activeSpeakers)

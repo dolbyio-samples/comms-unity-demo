@@ -24,8 +24,8 @@ public class Configuration
     [JsonProperty("token_server_url")]
     public string TokenServerUrl { get; set; }
 
-    [JsonProperty("app_key")]
-    public string AppKey { get; set; }
+    [JsonProperty("client_access_token")]
+    public string ClientAccessToken { get; set; }
 
     [JsonProperty("pubnub")]
     internal PubNubConfig PubNub { get; set; }

@@ -10,7 +10,7 @@ The configuration of the demo application is located in the `config.json` file. 
 - MacOS: `<path_to_the_player_app_bundle>/Contents/config.json`
 - Windows: `<path_to_the_executablename_Data_folder>/config.json`
 
-The file contains the following data:
+If the file does not exist, create it and add the following data to the file:
 
 ```json
 {
@@ -27,7 +27,7 @@ The file contains the following data:
 
 You can use this file to configure the demo application:
 
-1. Provide a URL your own token generation server in `token_server_url`.
+1. Provide the URL of your own token generation server in `token_server_url`.
 2. Provide a customer access token from the [Dolby.io Dashboard](https://dashboard.dolby.io/).
 
 ## Media injection
@@ -36,4 +36,4 @@ If you want to inject media, whether it is audio or video, see more information 
 
 ## Run
 
-To run the application, clone the repository and open a scene in `Assets/Scenes/Playground.unity`.
+To run the application, clone the repository and open the scene in `Assets/Scenes/Playground.unity`.

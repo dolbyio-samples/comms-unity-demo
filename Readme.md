@@ -1,17 +1,16 @@
-## Dolby.io Unity Virtual Worlds SDK Demo
+## Dolby.io Virtual World plugin for Unity Demo
 
-This repository contains a demo using the [Dolby.io Unity Virtual Worlds SDK](https://github.com/DolbyIO/comms-sdk-unity). 
+This repository contains a demo application that uses the [Dolby.io Virtual World plugin for Unity](https://github.com/DolbyIO/comms-sdk-unity). 
 
 ## Configuration
 
-The configuration is done via a json file named `config.json` located at various locations based on which system you are using:
+The configuration of the demo application is located in the `config.json` file. The location of the file depends on the system you are using:
 
-1. Unity Editor
-`<path to project folder>/Assets/config.json`
-2. MacOSX
-`<path to player app bundle>/Contents/config.json`
-3. Windows
-`<path to executablename_Data folder>/config.json`
+- Unity Editor: `<path_to_the_project_folder>/Assets/config.json`
+- MacOS: `<path_to_the_player_app_bundle>/Contents/config.json`
+- Windows: `<path_to_the_executablename_Data_folder>/config.json`
+
+If the file does not exist, create it and add the following data to the file:
 
 ```json
 {
@@ -26,15 +25,15 @@ The configuration is done via a json file named `config.json` located at various
 }
 ```
 
-You can use this file to configure the demo app to work with:
+You can use this file to configure the demo application:
 
-1. Your own token generation server and provide the URL in `token_server_url`
-2. A Customer access token grabed from the [Dolby.io Dashboard](https://dashboard.dolby.io/)
+1. Provide the URL of your own token generation server in `token_server_url`.
+2. Provide a customer access token from the [Dolby.io Dashboard](https://dashboard.dolby.io/).
 
-## Injecting Media
+## Media injection
 
-If you need injecting media, whether it is audio or video, have a look to the [C++ SDK Media Injection Demo](https://github.com/dolbyio-samples/comms-cpp-injection-demo)
+If you want to inject media, whether it is audio or video, see more information in the [C++ SDK Media Injection Demo](https://github.com/dolbyio-samples/comms-cpp-injection-demo).
 
 ## Run
 
-Clone the repository and open the scene at `Asets/Scenes/Playground.unity`
+To run the application, clone the repository and open the scene in `Assets/Scenes/Playground.unity`.

@@ -52,30 +52,30 @@ public class MySink : VideoSink
         }
     }
 
-    public override void OnFrame(string streamId, string trackId, VideoFrame frame)
+    public override void OnFrame(VideoFrame frame)
     {
         //Debug.Log($"OnFrame: {streamId}");
 
-        var splits = streamId.Split("_", 3);
-        if (splits.Length == 3 && IsFocused)
-        {
-            if (splits[2].Equals(ParticipantIdLeft))
-            {
-                _rendererLeft.Render(frame);
-            }
-            else if(splits[2].Equals(ParticipantIdRight))
-            {
-                _rendererRight.Render(frame);
-            }
-            else
-            {
-                frame.Dispose();
-            }
-        }
-        else
-        {
-            frame.Dispose();
-        }
+        //var splits = streamId.Split("_", 3);
+        //if (splits.Length == 3 && IsFocused)
+        //{
+        //    if (splits[2].Equals(ParticipantIdLeft))
+        //    {
+        //        _rendererLeft.Render(frame);
+        //    }
+        //    else if(splits[2].Equals(ParticipantIdRight))
+        //    {
+        //        _rendererRight.Render(frame);
+        //    }
+        //    else
+        //    {
+        //        frame.Dispose();
+        //    }
+        //}
+        //else
+        //{
+        //    frame.Dispose();
+        //}
     }
 }
 
@@ -86,6 +86,7 @@ public class ApplicationManager : MonoBehaviour
 
     public GameObject StageDisplayLeft;
     public GameObject StageDisplayRight;
+    public GameObject LocalVideoView;
 
     public ConferenceSpawner ConferenceSpawner;
     public UserInterface UserInterface;
@@ -148,9 +149,7 @@ public class ApplicationManager : MonoBehaviour
             await _sdk.SetLogLevelAsync(DolbyIO.Comms.LogLevel.Debug);
 
             await _sdk.InitAsync(token, RefreshToken);
-
-            await _sdk.Video.Remote.SetVideoSinkAsync(_sink);
-                       
+            
             Debug.Log("DolbyIOSDK Initialized");
 
             _sdk.Conference.StatusUpdated = OnConferenceStatusUpdated;
@@ -162,6 +161,9 @@ public class ApplicationManager : MonoBehaviour
             _sdk.MediaDevice.AudioDeviceRemoved = OnAudioDeviceRemoved;
 
             _sdk.Conference.ActiveSpeakerChange = OnActiveSpeakerChange;
+
+            _sdk.Conference.VideoTrackAdded = OnVideoTrackAdded;
+            _sdk.Conference.VideoTrackRemoved = OnVideoTrackRemoved;
 
             _sdk.InvalidTokenError = OnInvalidToken;
 
@@ -238,16 +240,26 @@ public class ApplicationManager : MonoBehaviour
         //await UserInterface.FillAudioDevices();
     }
 
-    public async void OnAudioDeviceChanged(AudioDevice device, bool noDevice)
+    public async void OnAudioDeviceChanged(DeviceIdentity id, bool noDevice)
     {
         // Debug.Log("AudioChanged");
         await UserInterface.FillAudioDevices();
     }
 
-    public async void OnAudioDeviceRemoved(byte[] id)
+    public async void OnAudioDeviceRemoved(DeviceIdentity id)
     {
         // Debug.Log("AudioRemoved");
         //await UserInterface.FillAudioDevices();
+    }
+
+    public void OnVideoTrackAdded(VideoTrack track)
+    {
+        ConferenceSpawner.OnVideoTrackAdded(track);
+    }
+
+    public void OnVideoTrackRemoved(VideoTrack track)
+    {
+        ConferenceSpawner.OnVideoTrackRemoved(track);
     }
 
     public void EnterStage(string participantId, string stageName)

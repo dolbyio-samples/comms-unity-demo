@@ -12,6 +12,7 @@ public class UserInterface : MonoBehaviour
     private DolbyIOSDK _sdk = DolbyIOManager.Sdk;
 
     public ConferenceSpawner ConferenceSpawner;
+    public GameObject LocalVideoView;
 
     private VisualElement _root;
     private Button _joinButton;
@@ -22,6 +23,7 @@ public class UserInterface : MonoBehaviour
 
     private Button _startVideoButton;
     private Button _stopVideoButton;
+    private bool _showLocalVideo = false;
 
     private Label _version;
 
@@ -42,6 +44,18 @@ public class UserInterface : MonoBehaviour
     public bool IsVisible()
     {
         return _root.style.display == DisplayStyle.Flex;
+    }
+
+    private void Start()
+    {
+        var controller = LocalVideoView.GetComponentInChildren<VideoController>();
+        _videoFrameHandler.Sink = controller.Renderer;
+    }
+
+    private void Update()
+    {
+        var controller = LocalVideoView.GetComponentInChildren<VideoController>();
+        controller.Show = _showLocalVideo;
     }
 
     private async Task<Conference> Join(string name, string alias)
@@ -137,13 +151,13 @@ public class UserInterface : MonoBehaviour
 
         _startVideoButton.clicked += async () =>
         {
-            _videoFrameHandler.Sink = new CameraFeedSink();
-
-            await _sdk.Video.Local.StartAsync(null, null);
+            _showLocalVideo = true;
+            await _sdk.Video.Local.StartAsync(null, _videoFrameHandler);
         };
 
         _stopVideoButton.clicked += async () =>
         {
+            _showLocalVideo = false;
             await _sdk.Video.Local.StopAsync();
         };
 
@@ -160,15 +174,5 @@ public class UserInterface : MonoBehaviour
         });
 
         //await FillAudioDevices();
-    }
-
-    class CameraFeedSink : VideoSink 
-    {
-        public override void OnFrame(string streamId, string trackId, VideoFrame frame)
-        {
-
-            Debug.Log($"Received frame for camea: {streamId}");
-            frame.Dispose();
-        }
     }
 }

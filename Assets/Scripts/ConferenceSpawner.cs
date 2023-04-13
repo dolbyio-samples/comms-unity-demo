@@ -15,6 +15,8 @@ public class ConferenceSpawner : MonoBehaviour
     private GameObject _participantAvatar;
 
     private Dictionary<string, GameObject> _participants = new Dictionary<string, GameObject>();
+    private Dictionary<string, VideoTrack> _videoTracks = new Dictionary<string, VideoTrack>();
+
     private List<Action> _backlog = new List<Action>();
 
     private int _index = 0;
@@ -37,10 +39,13 @@ public class ConferenceSpawner : MonoBehaviour
     public async Task Init(string conferenceId)
     {
         _conferenceId = conferenceId;
+
         var config  = new PNConfiguration();
         config.SubscribeKey = Configuration.PubNub.SubscribeKey;
         config.PublishKey = Configuration.PubNub.PublishKey;
         config.SecretKey = Configuration.PubNub.SecretKey;
+
+        config.ReconnectionPolicy = PNReconnectionPolicy.LINEAR;
 
         config.LogVerbosity = PNLogVerbosity.BODY;
         config.UserId = _sdk.Session.User.Id;
@@ -74,6 +79,7 @@ public class ConferenceSpawner : MonoBehaviour
             Destroy(v);
         }
         _participants.Clear();
+        _videoTracks.Clear();
         _backlog.Clear();
     }
 
@@ -138,7 +144,6 @@ public class ConferenceSpawner : MonoBehaviour
 
                     if (message.TryGetValue("position", out result))
                     {
-                        Debug.Log($"Received position for {participantId}");
                         var position = result as Dictionary<string, object>;
                         _backlog.Add(() =>
                         {
@@ -213,6 +218,59 @@ public class ConferenceSpawner : MonoBehaviour
         return obj;
     }
 
+    private void UpdateVideoViews()
+    {
+        foreach (var kvp in _participants)
+        {
+            VideoTrack track;
+            if (_videoTracks.TryGetValue(kvp.Key, out track))
+            {
+                lock(_backlog)
+                {
+                    _backlog.Add(() =>
+                    {
+                        var controller = kvp.Value.GetComponentInChildren<VideoController>();
+                        var nameObject = kvp.Value.GetComponentInChildren<TextMeshProUGUI>();
+
+                        if (nameObject)
+                        {
+                            nameObject.enabled = false;
+                        }
+
+                        controller.Show = true;
+                        _sdk.Video.Remote.SetVideoSinkAsync(track, controller.Renderer)
+                            .ContinueWith(task =>
+                            {
+                                if (task.IsFaulted)
+                                {
+                                    Debug.LogWarning(task.Exception.Message);
+                                }
+                            }, TaskContinuationOptions.OnlyOnFaulted);
+                    });
+                }
+            }
+            else
+            {
+                lock (_backlog)
+                {
+                    _backlog.Add(() =>
+                    {
+                        var controller = kvp.Value.GetComponentInChildren<VideoController>();
+                        controller.Show = false;
+
+                        var nameObject = kvp.Value.GetComponentInChildren<TextMeshProUGUI>();
+
+                        if (nameObject)
+                        {
+                            nameObject.enabled = true;
+                        }
+                    });
+                }
+                
+            }
+        }
+    }
+
     private void AddParticipant(Participant p)
     {
         lock(_backlog)
@@ -249,6 +307,7 @@ public class ConferenceSpawner : MonoBehaviour
                 }
             });
         }
+        UpdateVideoViews();
     }
 
     private void RemoveParticipant(string userId)
@@ -284,5 +343,18 @@ public class ConferenceSpawner : MonoBehaviour
         {
             RemoveParticipant(p.Id);
         }
+    }
+
+    public void OnVideoTrackAdded(VideoTrack track)
+    {
+        Debug.Log($"VideoTrack added for: {track.ParticipantId}");
+        _videoTracks.Add(track.ParticipantId, track);
+        UpdateVideoViews();
+    }
+    
+    public void OnVideoTrackRemoved(VideoTrack track)
+    {
+        _videoTracks.Remove(track.ParticipantId);
+        UpdateVideoViews();
     }
 }

@@ -18,7 +18,10 @@ public class LocalPlayerPosition : MonoBehaviour
     private JsonSerializerSettings _serializerSettings;
 
     private float _timePosition = 0.0f;
+    private float _backupTimePosition = 0.0f;
+
     private float _timeDirection = 0.0f;
+    private float _backupTimeDirection = 0.0f;
 
     private Vector3 _position;
     private Vector3 _direction;
@@ -34,9 +37,10 @@ public class LocalPlayerPosition : MonoBehaviour
 
     private async Task UpdatePosition()
     {
-         _timePosition += Time.deltaTime;
+        _timePosition += Time.deltaTime;
+        _backupTimePosition += Time.deltaTime;
 
-        if (_timePosition >= 0.3)
+        if (_timePosition >= 0.3 || _backupTimePosition >= 3)
         {
             _timePosition = 0;
 
@@ -45,7 +49,7 @@ public class LocalPlayerPosition : MonoBehaviour
                 var userId = _sdk.Session.User.Id;
                 var position = new Vector3(transform.position.x, 1.0f, -transform.position.z);
 
-                if ((position - _position).magnitude > 0.1f)
+                if ((position - _position).magnitude > 0.1f || _backupTimePosition > 0)
                 {
                     _position = position;
                     var msg = new PlayerPosition(userId, position);
@@ -64,6 +68,8 @@ public class LocalPlayerPosition : MonoBehaviour
                             }
                         });
                 }
+
+                _backupTimePosition = 0;
             }
             catch (Exception e)
             {
@@ -75,8 +81,9 @@ public class LocalPlayerPosition : MonoBehaviour
     private async Task UpdateDirection()
     {
         _timeDirection += Time.deltaTime;
+        _backupTimeDirection += Time.deltaTime;
 
-        if (_timeDirection >= 0.3)
+        if (_timeDirection >= 0.3 || _backupTimeDirection >= 3)
         {
             _timeDirection = 0;
 
@@ -85,7 +92,7 @@ public class LocalPlayerPosition : MonoBehaviour
                 var userId = _sdk.Session.User.Id;
                 var direction = new Vector3(0.0f, transform.rotation.eulerAngles.y, 0.0f);
 
-                if ((direction - _direction).magnitude > 0.1f)
+                if ((direction - _direction).magnitude > 0.1f || _backupTimeDirection > 0)
                 {
                     _direction = direction;
                     var msg = new PlayerDirection(userId, direction);
@@ -104,6 +111,8 @@ public class LocalPlayerPosition : MonoBehaviour
                             }
                         });
                 }
+
+                _backupTimeDirection = 0;
             }
             catch (Exception e)
             {

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 8900000, guid: 619e305f5165a9946b7f72464e44ca4a, type: 3}
   m_Sun: {fileID: 2114283754330233425}
-  m_IndirectSpecularColor: {r: 0.029152285, g: 0.06444558, b: 0.12695089, a: 1}
+  m_IndirectSpecularColor: {r: 0.029152341, g: 0.06444578, b: 0.12695113, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -200,8 +200,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39b710bb95e9f435fa2954abc3cff550, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AutoLeaveConference: 1
+  PlayerName: Player
+  AutoOpenSession: 1
   AutoCloseSession: 1
+  AutoLeaveConference: 1
   PositionDuration: 0.3
   DirectionDuration: 0.05
   AudioListener: {fileID: 0}
@@ -1397,6 +1399,11 @@ PrefabInstance:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: 88bab6509f4f640f483a52a3831c31c7, type: 2}
+    - target: {fileID: 2185823108958971380, guid: 64dce48905ffd9b4293e595fa6941544,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2185823108958971380, guid: 64dce48905ffd9b4293e595fa6941544,
         type: 3}
       propertyPath: SprintSpeed

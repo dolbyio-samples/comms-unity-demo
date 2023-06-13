@@ -224,13 +224,15 @@
       "url": "https://packages.unity.com"
     },
     "dolbyio.comms.unity": {
-      "version": "https://github.com/DolbyIO/comms-sdk-unity.git",
+      "version": "https://github.com/DolbyIO/comms-sdk-unity.git#develop",
       "depth": 0,
       "source": "git",
       "dependencies": {
-        "com.unity.nuget.newtonsoft-json": "3.0.2"
+        "com.unity.nuget.newtonsoft-json": "3.0.2",
+        "com.unity.visualscripting": "1.8.0",
+        "com.unity.textmeshpro": "3.0.6"
       },
-      "hash": "718808dc14675acacb533b87d5e69de3f614d705"
+      "hash": "0c5f0f84f3120c5b90f6ac809fb416fc3a618d10"
     },
     "com.unity.modules.ai": {
       "version": "1.0.0",

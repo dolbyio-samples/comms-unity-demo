@@ -52,7 +52,7 @@ public class MySink : VideoSink
         }
     }
 
-    public override void OnFrame(string streamId, string trackId, VideoFrame frame)
+    public void OnFrame(string streamId, string trackId, VideoFrame frame)
     {
         //Debug.Log($"OnFrame: {streamId}");
 
@@ -76,6 +76,11 @@ public class MySink : VideoSink
         {
             frame.Dispose();
         }
+    }
+
+    public override void OnFrame(VideoFrame frame)
+    {
+        
     }
 }
 
@@ -149,7 +154,7 @@ public class ApplicationManager : MonoBehaviour
 
             await _sdk.InitAsync(token, RefreshToken);
 
-            await _sdk.Video.Remote.SetVideoSinkAsync(_sink);
+          //  await _sdk.Video.Remote.SetVideoSinkAsync(_sink);
                        
             Debug.Log("DolbyIOSDK Initialized");
 
@@ -158,8 +163,8 @@ public class ApplicationManager : MonoBehaviour
             _sdk.Conference.ParticipantUpdated = OnParticipantUpdated;
 
             _sdk.MediaDevice.AudioDeviceAdded = OnAudioDeviceAdded;
-            _sdk.MediaDevice.AudioDeviceChanged = OnAudioDeviceChanged;
-            _sdk.MediaDevice.AudioDeviceRemoved = OnAudioDeviceRemoved;
+           // _sdk.MediaDevice.AudioDeviceChanged = OnAudioDeviceChanged;
+         //   _sdk.MediaDevice.AudioDeviceRemoved = OnAudioDeviceRemoved;
 
             _sdk.Conference.ActiveSpeakerChange = OnActiveSpeakerChange;
 

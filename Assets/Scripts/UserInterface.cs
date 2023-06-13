@@ -164,11 +164,16 @@ public class UserInterface : MonoBehaviour
 
     class CameraFeedSink : VideoSink 
     {
-        public override void OnFrame(string streamId, string trackId, VideoFrame frame)
+        public void OnFrame(string streamId, string trackId, VideoFrame frame)
         {
 
             Debug.Log($"Received frame for camea: {streamId}");
             frame.Dispose();
+        }
+
+        public override void OnFrame(VideoFrame frame)
+        {
+            
         }
     }
 }

@@ -9,7 +9,7 @@
                     "name": "Move",
                     "type": "Value",
                     "id": "6bc1aaf4-b110-4ff7-891e-5b9fe6f32c4d",
-                    "expectedControlType": "Vector2",
+                    "expectedControlType": "Axis",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
@@ -178,7 +178,7 @@
                     "id": "d1d171b6-19d8-47a6-ba3a-71b6a8e7b3c0",
                     "path": "<Gamepad>/rightStick",
                     "interactions": "",
-                    "processors": "InvertVector2(invertX=false),StickDeadzone,ScaleVector2(x=150,y=150)",
+                    "processors": "InvertVector2(invertX=false),StickDeadzone(min=0.2),ScaleVector2(x=150,y=150)",
                     "groups": "Gamepad",
                     "action": "Look",
                     "isComposite": false,

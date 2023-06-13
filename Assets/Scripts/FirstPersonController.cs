@@ -15,7 +15,7 @@ namespace StarterAssets
 		[Tooltip("Move speed of the character in m/s")]
 		public float MoveSpeed = 4.0f;
 		[Tooltip("Sprint speed of the character in m/s")]
-		public float SprintSpeed = 6.0f;
+		public float SprintSpeed = 8.0f;
 		[Tooltip("Rotation speed of the character")]
 		public float RotationSpeed = 1.0f;
 		[Tooltip("Acceleration and deceleration")]
@@ -60,8 +60,10 @@ namespace StarterAssets
 		private float _verticalVelocity;
 		private float _terminalVelocity = 53.0f;
 
-		// timeout deltatime
-		private float _jumpTimeoutDelta;
+		private float _runThreshold = 0.8f;
+
+        // timeout deltatime
+        private float _jumpTimeoutDelta;
 		private float _fallTimeoutDelta;
 
 	
@@ -189,8 +191,19 @@ namespace StarterAssets
 
 		private void Move()
 		{
-			// set target speed based on move speed, sprint speed and if sprint is pressed
-			float targetSpeed = _input.sprint ? SprintSpeed : MoveSpeed;
+			float targetSpeed;
+
+//			Debug.Log("Input Value: " + _input.move.magnitude);
+            // set target speed to move speed or sprint speed if the input value is above the run threshold
+			if (_input.move.magnitude >= _runThreshold)
+			{
+				targetSpeed = SprintSpeed;
+            }
+			else
+			{
+                targetSpeed = MoveSpeed;
+            }
+       
 
 			// a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
 
@@ -218,6 +231,8 @@ namespace StarterAssets
 			{
 				_speed = targetSpeed;
 			}
+
+//			Debug.Log("Speed: " + _speed);
 
 
             _animationBlend = Mathf.Lerp(_animationBlend, targetSpeed, Time.deltaTime * SpeedChangeRate);

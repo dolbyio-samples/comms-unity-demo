@@ -32,7 +32,7 @@ You can use this file to configure the demo application:
 
 ## Media injection
 
-If you want to inject media, whether it is audio or video, see more information in the [C++ SDK Media Injection Demo](https://github.com/dolbyio-samples/comms-cpp-injection-demo).
+If you want to inject media, whether it is audio or video, see more information in the [C++ SDK Media Injection Demo](https://github.com/dolbyio-samples/comms-cpp-injection-demo). Testing
 
 ## Run
 

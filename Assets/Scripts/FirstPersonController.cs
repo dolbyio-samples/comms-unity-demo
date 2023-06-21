@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 #endif
 
-namespace StarterAssets
+namespace UpdatedStarterAssets
 {
 	[RequireComponent(typeof(CharacterController))]
 #if ENABLE_INPUT_SYSTEM
@@ -71,7 +71,7 @@ namespace StarterAssets
 		private PlayerInput _playerInput;
 #endif
 		private CharacterController _controller;
-		private StarterAssetsInputs _input;
+		private UpdatedStarterAssetsInputs _input;
 		private GameObject _mainCamera;
 
 		private const float _threshold = 0.01f;
@@ -124,7 +124,7 @@ namespace StarterAssets
 		{
 			_controller = GetComponent<CharacterController>();
             _hasAnimator = TryGetComponent(out _animator);
-			_input = GetComponent<StarterAssetsInputs>();
+			_input = GetComponent<UpdatedStarterAssetsInputs>();
 
 #if ENABLE_INPUT_SYSTEM
 			_playerInput = GetComponent<PlayerInput>();

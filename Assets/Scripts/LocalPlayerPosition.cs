@@ -51,8 +51,7 @@ public class LocalPlayerPosition : MonoBehaviour
                     var msg = new PlayerPosition(userId, position);
 
                     var pubnub = ConferenceSpawner.PubNub;
-                    Debug.Log("pub" + pubnub.ToString());
-                    Debug.Log("test");
+
                     pubnub.Publish()
                         .Channel(_conferenceId)
                         .Message(msg)

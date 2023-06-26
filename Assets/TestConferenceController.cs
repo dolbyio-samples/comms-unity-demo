@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 using DolbyIO.Comms;
 using DolbyIO.Comms.Unity;
 using Unity.VisualScripting;
@@ -18,6 +19,16 @@ namespace DolbyIO.Comms.Unity
     public class TestConferenceController : MonoBehaviour
     {
         private DolbyIOSDK _sdk = DolbyIOManager.Sdk;
+
+        private GameObject _participantAvatar;
+
+        private Dictionary<string, GameObject> _participants = new Dictionary<string, GameObject>();
+
+        private string _conferenceId = "";
+
+        private int _index = 0;
+
+        private List<Action> _backlog = new List<Action>();
 
         private List<VideoTrack> _tracks = new List<VideoTrack>();
 
@@ -54,6 +65,11 @@ namespace DolbyIO.Comms.Unity
         public GameObject VideoDevice;
         public GameObject ScreenShareSource;
 
+        void Awake()
+        {
+            _participantAvatar = Resources.Load("ParticipantAvatar") as GameObject;
+        }
+
         void Start()
         {
             if (_sdk.IsInitialized)
@@ -71,6 +87,7 @@ namespace DolbyIO.Comms.Unity
             joinButton.onClick.AddListener(() =>
             {
                 var conference = Join();
+                _conferenceId = conference.Id;
                 PubNubInitializer.Init(conference.Id);
 
             });
@@ -243,6 +260,59 @@ namespace DolbyIO.Comms.Unity
             }
         }
 
+        private void AddParticipant(Participant p)
+        {
+            lock (_backlog)
+            {
+                _backlog.Add(() =>
+                {
+                    if (!_participants.ContainsKey(p.Id))
+                    {
+                        Metadata? metadata = Helpers.DecodeMetadata(p.Info.ExternalId);
+                        var initialPosition = new UnityEngine.Vector3(-450, 0, -450);
+                        if (metadata != null)
+                        {
+                            initialPosition = new UnityEngine.Vector3(metadata.position.x, 1.0f, metadata.position.z);
+                        }
+
+                        GameObject participant = Instantiate(_participantAvatar, initialPosition, UnityEngine.Quaternion.identity);
+
+                        TextMeshProUGUI nameObject = participant.GetComponentInChildren<TextMeshProUGUI>();
+
+                        if (nameObject)
+                        {
+                            nameObject.SetText(p.Info.Name);
+                        }
+
+                        ParticipantController participantController = participant.GetComponentInChildren<ParticipantController>();
+                        participantController.Init(_conferenceId, p);
+                        participantController.MoveToWorldCoordinates(new UnityEngine.Vector3(initialPosition.x, 0.0f, initialPosition.z));
+                        if (metadata != null)
+                        {
+                            participantController.LookAt(new UnityEngine.Vector3(0.0f, metadata.position.r, 0.0f));
+                        }
+                        _participants.Add(p.Id, participant);
+                        _index++;
+                    }
+                });
+            }
+        }
+
+        private void RemoveParticipant(string userId)
+        {
+            lock (_backlog)
+            {
+                _backlog.Add(() => {
+                    GameObject participant;
+                    if (_participants.TryGetValue(userId, out participant))
+                    {
+                        Destroy(participant);
+                        _participants.Remove(userId);
+                    }
+                });
+            }
+        }
+
         /// For performance reasons, instead of propagating to video controllers the various video track events,
         /// Controllers will register themself to the Conference Controller during the Awake phase.
         internal void RegisterVideoController(TestVideoController controller)
@@ -274,11 +344,16 @@ namespace DolbyIO.Comms.Unity
         {
             if (ParticipantStatus.OnAir == p.Status)
             {
+                AddParticipant(p);
                 UpdateVideoControllers().ContinueWith(t =>
                 {
                     UnityEngine.Debug.LogWarning(t.Exception.Message);
                 },
                 TaskContinuationOptions.OnlyOnFaulted);
+            }
+            else if (ParticipantStatus.Left == p.Status)
+            {
+                RemoveParticipant(p.Id);
             }
         }
 
@@ -325,12 +400,26 @@ namespace DolbyIO.Comms.Unity
                 {
                     VideoTrack track = _tracks.Find(t => t.ParticipantId.Equals(participantId));
                     c.UpdateTrack(track);
-
-                    UnityEngine.Debug.Log("hi");
                 }
             }
 
         }
+
+        void Update()
+        {
+            lock (_backlog)
+            {
+                if (_backlog.Count > 0)
+                {
+                    foreach (var action in _backlog)
+                    {
+                        action();
+                    }
+                    _backlog.Clear();
+                }
+            }
+        }
     }
+
 }
 

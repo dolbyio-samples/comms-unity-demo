@@ -63,7 +63,7 @@ public class MySink : VideoSink
             {
                 _rendererLeft.Render(frame);
             }
-            else if(splits[2].Equals(ParticipantIdRight))
+            else if (splits[2].Equals(ParticipantIdRight))
             {
                 _rendererRight.Render(frame);
             }
@@ -80,8 +80,10 @@ public class MySink : VideoSink
 
     public override void OnFrame(VideoFrame frame)
     {
-        
+
+
     }
+
 }
 
 public class ApplicationManager : MonoBehaviour

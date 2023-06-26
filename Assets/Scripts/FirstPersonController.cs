@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 #endif
 
-namespace UpdatedStarterAssets
+namespace StarterAssets
 {
 	[RequireComponent(typeof(CharacterController))]
 #if ENABLE_INPUT_SYSTEM
@@ -71,7 +71,7 @@ namespace UpdatedStarterAssets
 		private PlayerInput _playerInput;
 #endif
 		private CharacterController _controller;
-		private UpdatedStarterAssetsInputs _input;
+		private StarterAssetsInputs _input;
 		private GameObject _mainCamera;
 
 		private const float _threshold = 0.01f;
@@ -124,7 +124,7 @@ namespace UpdatedStarterAssets
 		{
 			_controller = GetComponent<CharacterController>();
             _hasAnimator = TryGetComponent(out _animator);
-			_input = GetComponent<UpdatedStarterAssetsInputs>();
+			_input = GetComponent<StarterAssetsInputs>();
 
 #if ENABLE_INPUT_SYSTEM
 			_playerInput = GetComponent<PlayerInput>();
@@ -193,7 +193,6 @@ namespace UpdatedStarterAssets
 		{
 			float targetSpeed;
 
-//			Debug.Log("Input Value: " + _input.move.magnitude);
             // set target speed to move speed or sprint speed if the input value is above the run threshold
 			if (_input.move.magnitude >= _runThreshold)
 			{

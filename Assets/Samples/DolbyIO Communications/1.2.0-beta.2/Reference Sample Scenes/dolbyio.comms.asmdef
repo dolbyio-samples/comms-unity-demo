@@ -1,5 +1,6 @@
 {
     "name": "DolbyI0.Comms.Unity.Samples",
+    "rootNamespace": "",
     "references": [
         "DolbyIO.Comms.Sdk",
         "DolbyI0.Comms.Unity"

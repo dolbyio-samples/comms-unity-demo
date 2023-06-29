@@ -165,7 +165,7 @@ public class ApplicationManager : MonoBehaviour
             _sdk.Conference.ParticipantUpdated = OnParticipantUpdated;
 
             _sdk.MediaDevice.AudioDeviceAdded = OnAudioDeviceAdded;
-           // _sdk.MediaDevice.AudioDeviceChanged = OnAudioDeviceChanged;
+           //_sdk.MediaDevice.AudioDeviceChanged = OnAudioDeviceChanged;
          //   _sdk.MediaDevice.AudioDeviceRemoved = OnAudioDeviceRemoved;
 
             _sdk.Conference.ActiveSpeakerChange = OnActiveSpeakerChange;

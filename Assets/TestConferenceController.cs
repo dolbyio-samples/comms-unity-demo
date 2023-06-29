@@ -272,7 +272,7 @@ namespace DolbyIO.Comms.Unity
                         var initialPosition = new UnityEngine.Vector3(-450, 0, -450);
                         if (metadata != null)
                         {
-                            initialPosition = new UnityEngine.Vector3(metadata.position.x, 1.0f, metadata.position.z);
+                            initialPosition = new UnityEngine.Vector3(metadata.position.x, 11.0f, metadata.position.z);
                         }
 
                         GameObject participant = Instantiate(_participantAvatar, initialPosition, UnityEngine.Quaternion.identity);
@@ -286,7 +286,7 @@ namespace DolbyIO.Comms.Unity
 
                         ParticipantController participantController = participant.GetComponentInChildren<ParticipantController>();
                         participantController.Init(_conferenceId, p);
-                        participantController.MoveToWorldCoordinates(new UnityEngine.Vector3(initialPosition.x, 0.0f, initialPosition.z));
+                        participantController.MoveToWorldCoordinates(new UnityEngine.Vector3(initialPosition.x, initialPosition.y, initialPosition.z));
                         if (metadata != null)
                         {
                             participantController.LookAt(new UnityEngine.Vector3(0.0f, metadata.position.r, 0.0f));
@@ -351,7 +351,7 @@ namespace DolbyIO.Comms.Unity
                 },
                 TaskContinuationOptions.OnlyOnFaulted);
             }
-            else if (ParticipantStatus.Left == p.Status)
+            else if (ParticipantStatus.Left == (p.Status))
             {
                 RemoveParticipant(p.Id);
             }

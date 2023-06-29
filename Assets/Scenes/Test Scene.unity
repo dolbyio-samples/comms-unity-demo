@@ -354,12 +354,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   starterAssetsInputs: {fileID: 0}
---- !u!1 &78330771 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8679553885459771444, guid: 5f2a794850beb4576b1e12b0a0856d54,
-    type: 3}
-  m_PrefabInstance: {fileID: 408473650}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &114229873
 GameObject:
   m_ObjectHideFlags: 0
@@ -997,7 +991,7 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 1351406202}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &247463110
+--- !u!114 &247463115
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2749,12 +2743,15 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'Virtual Worlds Plugin Breakdown:
 
-    *In order to join a conference,
-    enter the alias of the conference and click "Join"
+    *This demo will introduce you to
+    the Virtual Worlds Unity Plugin where you will get to experience the wonder of
+    3D spatial audio.
 
 
-    *You can share your
-    screen or your camera by clicking the Start Video or Start Share Screen button'
+    *As you move through the environment, pay attention to
+    the position and movement of the sound sources around you. The audio should dynamically
+    change based on your position and orientation, creating a realistic and immersive
+    soundscape.'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -2781,8 +2778,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 49.7
-  m_fontSizeBase: 49.7
+  m_fontSize: 40
+  m_fontSizeBase: 40
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -6839,7 +6836,6 @@ GameObject:
   - component: {fileID: 1659611299}
   - component: {fileID: 1659611297}
   - component: {fileID: 1659611298}
-  - component: {fileID: 1659611300}
   m_Layer: 0
   m_Name: App
   m_TagString: Untagged
@@ -6940,20 +6936,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PubNubInitializer: {fileID: 1659611297}
---- !u!114 &1659611300
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1659611292}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1ec391176ba1d491ca8eeb8a330b3ad7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  StageDisplayLeft: {fileID: 2018748125}
-  StageDisplayRight: {fileID: 78330771}
 --- !u!1 &1693299410
 GameObject:
   m_ObjectHideFlags: 0
@@ -7497,7 +7479,7 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 408473650}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1799664810
+--- !u!114 &1799664815
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -7511,7 +7493,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Conference: {fileID: 1659611298}
   FilterBy: 0
-  Filter: RightDolby.io
+  Filter: RightVideo
   IsLocal: 0
   IsScreenShare: 0
 --- !u!1 &1809244175
@@ -8730,12 +8712,6 @@ Transform:
   m_Father: {fileID: 1237383689}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
---- !u!1 &2018748125 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8679553885459771444, guid: 5f2a794850beb4576b1e12b0a0856d54,
-    type: 3}
-  m_PrefabInstance: {fileID: 1351406202}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2031631395
 GameObject:
   m_ObjectHideFlags: 0

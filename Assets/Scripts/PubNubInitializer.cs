@@ -13,7 +13,7 @@ using System.Security.Cryptography;
     public class PubNubInitializer : MonoBehaviour
     {
         private DolbyIOSDK _sdk = DolbyIOManager.Sdk;
-        public static PubNub PubNub = ConferenceSpawner.PubNub;
+        public static PubNub PubNub = null;
         private Dictionary<string, GameObject> _participants = new Dictionary<string, GameObject>();
         private List<Action> _backlog = new List<Action>();
         public Configuration Configuration { get; set; }
@@ -34,18 +34,13 @@ using System.Security.Cryptography;
           // controller.onInformationReady += Init;
         }
 
-
-
         public void Init(string conferenceId)
         {
             Debug.Log(conferenceId);
             _conferenceId = conferenceId;
             var config = new PNConfiguration();
-        Debug.Log("test0");
-      config.SubscribeKey = Configuration.PubNub.SubscribeKey;
-        Debug.Log("test1");
+         config.SubscribeKey = Configuration.PubNub.SubscribeKey;
           config.PublishKey = Configuration.PubNub.PublishKey;
-        Debug.Log("test2");
         config.SecretKey = Configuration.PubNub.SecretKey;
 
            config.LogVerbosity = PNLogVerbosity.BODY;
@@ -62,6 +57,26 @@ using System.Security.Cryptography;
                     .Execute();
 
         }
+
+        public void Release()
+    {
+        PubNub.Unsubscribe()
+            .Channels(new List<string> { _conferenceId })
+            .Async((result, status) =>
+            {
+                if (status.Error)
+                {
+                    Debug.LogError("Failed to unsubscribe to channel");
+                }
+            });
+
+        foreach (var (k, v) in _participants)
+        {
+            Destroy(v);
+        }
+        _participants.Clear();
+        _backlog.Clear();
+    }
 
         void SubscribeHandler(object sender, EventArgs e)
         {
@@ -138,5 +153,20 @@ using System.Security.Cryptography;
 
             }
         }
+
+        void Update()
+    {
+        lock (_backlog)
+        {
+            if (_backlog.Count > 0)
+            {
+                foreach (var action in _backlog)
+                {
+                    action();
+                }
+                _backlog.Clear();
+            }
+        }
     }
+}
 

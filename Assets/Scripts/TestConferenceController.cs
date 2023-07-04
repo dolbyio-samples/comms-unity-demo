@@ -269,7 +269,7 @@ namespace DolbyIO.Comms.Unity
                     if (!_participants.ContainsKey(p.Id))
                     {
                         Metadata? metadata = Helpers.DecodeMetadata(p.Info.ExternalId);
-                        var initialPosition = new UnityEngine.Vector3(-450, 0, -450);
+                        var initialPosition = new UnityEngine.Vector3(-6.34f, 9.64f, -2.2f);
                         if (metadata != null)
                         {
                             initialPosition = new UnityEngine.Vector3(metadata.position.x, 11.0f, metadata.position.z);

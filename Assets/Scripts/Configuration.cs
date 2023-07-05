@@ -49,5 +49,20 @@ public class Configuration
 			throw new Exception($"Configuration file {_configurationPath}/{_fileName} does not exists.");
 		}
 	}
+
+    public static Configuration LoadTextAsset(string content)
+    {
+       // var file = $"{_configurationPath}/{_fileName}";
+
+        if (content != null)
+        {
+           // string content = File.ReadAllText($"{_configurationPath}/{_fileName}");
+            return JsonConvert.DeserializeObject<Configuration>(content);
+        }
+        else
+        {
+            throw new Exception($"Configuration file is null, empty, or invalid.");
+        }
+    }
 }
 

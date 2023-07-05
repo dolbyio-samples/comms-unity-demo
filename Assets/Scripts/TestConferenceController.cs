@@ -10,7 +10,7 @@ using DolbyIO.Comms.Unity;
 using Unity.VisualScripting;
 using System.Diagnostics;
 using System.Numerics;
-//using PubNubAPI;
+using PubNubAPI;
 
 namespace DolbyIO.Comms.Unity
 {
@@ -19,6 +19,10 @@ namespace DolbyIO.Comms.Unity
     public class TestConferenceController : MonoBehaviour
     {
         private DolbyIOSDK _sdk = DolbyIOManager.Sdk;
+
+        public static PubNub PubNub = null;
+
+        public Configuration Configuration { get; set; }
 
         private GameObject _participantAvatar;
 
@@ -41,7 +45,6 @@ namespace DolbyIO.Comms.Unity
         [SerializeField]
         private string _conferenceAlias;
 
-        public PubNubInitializer PubNubInitializer;
         //public event Action<Task> onInformationReady;
 
         [SerializeField]
@@ -88,9 +91,63 @@ namespace DolbyIO.Comms.Unity
             {
                 var conference = Join();
                 _conferenceId = conference.Id;
-                PubNubInitializer.Init(conference.Id);
+                Init(conference.Id);
 
             });
+        }
+
+        public async Task Init(string conferenceId)
+        {
+            _conferenceId = conferenceId;
+            var config = new PNConfiguration();
+            config.SubscribeKey = Configuration.PubNub.SubscribeKey;
+            config.PublishKey = Configuration.PubNub.PublishKey;
+            config.SecretKey = Configuration.PubNub.SecretKey;
+
+            config.LogVerbosity = PNLogVerbosity.BODY;
+            config.UserId = _sdk.Session.User.Id;
+
+            if (PubNub == null)
+            {
+                PubNub = new PubNub(config);
+              
+            }
+            PubNub.SubscribeCallback += SubscribeHandler;
+            PubNub.Subscribe()
+                    .Channels(new List<string> { conferenceId })
+                    .Execute();
+
+        }
+
+        public void Release()
+        {
+            PubNub.Unsubscribe()
+                .Channels(new List<string> { _conferenceId })
+                .Async((result, status) =>
+                {
+                    if (status.Error)
+                    {
+                        UnityEngine.Debug.LogError("Failed to unsubscribe to channel");
+                    }
+                });
+
+            foreach (var (k, v) in _participants)
+            {
+                Destroy(v);
+            }
+            _participants.Clear();
+            _backlog.Clear();
+        }
+
+        void SubscribeHandler(object sender, EventArgs e)
+        {
+            SubscribeEventEventArgs mea = e as SubscribeEventEventArgs;
+
+            if (mea.MessageResult != null)
+            {
+                var msg = mea.MessageResult.Payload as Dictionary<string, object>;
+                UpdatePositions(msg);
+            }
         }
 
         public Conference Join()
@@ -139,6 +196,7 @@ namespace DolbyIO.Comms.Unity
             try
             {
                 _sdk.Conference.LeaveAsync().Wait();
+                Release();
             }
             catch (DolbyIOException e)
             {
@@ -342,7 +400,7 @@ namespace DolbyIO.Comms.Unity
 
         private void HandleParticipantUpdated(Participant p)
         {
-            if (ParticipantStatus.OnAir == p.Status)
+            if (ParticipantStatus.OnAir == p.Status && _sdk.Session.User.Id != p.Id)
             {
                 AddParticipant(p);
                 UpdateVideoControllers().ContinueWith(t =>
@@ -403,6 +461,67 @@ namespace DolbyIO.Comms.Unity
                 }
             }
 
+        }
+
+        void UpdatePositions(Dictionary<string, object> message)
+        {
+            try
+            {
+                lock (_backlog)
+                {
+                    var participantId = message["participantId"].ToString();
+                    object result;
+
+                    GameObject participant;
+                    if (_participants.TryGetValue(participantId, out participant))
+                    {
+                        ParticipantController participantController = participant.GetComponentInChildren<ParticipantController>();
+
+                        if (message.TryGetValue("position", out result))
+                        {
+                            UnityEngine.Debug.Log($"Received position for {participantId}");
+                            var position = result as Dictionary<string, object>;
+                            _backlog.Add(() =>
+                            {
+                                participantController.MoveToWorldCoordinates
+                                (
+                                    new UnityEngine.Vector3
+                                    (
+                                        float.Parse(position["x"].ToString()),
+                                        1.0f,
+                                        -float.Parse(position["z"].ToString())
+                                    )
+                                );
+                            });
+                        }
+
+
+                        if (message.TryGetValue("direction", out result))
+                        {
+                            var direction = result as Dictionary<string, object>;
+                            _backlog.Add(() =>
+                            {
+                                participantController.LookAt
+                                (
+                                    new UnityEngine.Vector3
+                                    (
+                                        float.Parse(direction["x"].ToString()),
+                                        float.Parse(direction["y"].ToString()),
+                                        float.Parse(direction["z"].ToString())
+                                    )
+                                );
+                            });
+                        }
+                    }
+                }
+
+            }
+            catch (Exception e)
+            {
+                //Debug.LogError(snapshot);
+                UnityEngine.Debug.LogError($"Failed to update positions: {e.Message}");
+            }
+       
         }
 
         void Update()

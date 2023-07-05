@@ -17,9 +17,11 @@ using DolbyIO.Comms.Unity;
 public class ConfigurationLoader : MonoBehaviour
 {
 
-    public PubNubInitializer PubNubInitializer;
+    public TestConferenceController TestConferenceController;
  
     internal Configuration Configuration;
+
+    public TextAsset jsonFile;
 
     private HttpClient _client = new HttpClient();
 
@@ -57,8 +59,8 @@ public class ConfigurationLoader : MonoBehaviour
         // Loading configuration
         try
         {
-            Configuration = Configuration.Load();
-            PubNubInitializer.Configuration = Configuration;
+            Configuration = Configuration.LoadTextAsset(jsonFile.text);
+            TestConferenceController.Configuration = Configuration;
         }
         catch (Exception e)
         {

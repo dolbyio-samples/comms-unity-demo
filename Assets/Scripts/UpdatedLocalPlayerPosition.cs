@@ -51,7 +51,7 @@ public class UpdatedLocalPlayerPosition : MonoBehaviour
                     var msg = new PlayerPosition(userId, position);
 
                     //var pubnub = ConferenceSpawner.PubNub;
-                    var pubnub = PubNubInitializer.PubNub;
+                    var pubnub = TestConferenceController.PubNub;
 
                     pubnub.Publish()
                         .Channel(_conferenceId)
@@ -92,7 +92,7 @@ public class UpdatedLocalPlayerPosition : MonoBehaviour
                     _direction = direction;
                     var msg = new PlayerDirection(userId, direction);
 
-                    var pubnub = PubNubInitializer.PubNub;
+                    var pubnub = TestConferenceController.PubNub;
                     pubnub.Publish()
                         .Channel(_conferenceId)
                         .Message(msg)

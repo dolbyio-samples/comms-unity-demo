@@ -20,6 +20,8 @@ namespace DolbyIO.Comms.Unity
     {
         private DolbyIOSDK _sdk = DolbyIOManager.Sdk;
 
+        public static DolbyIOManager DolbyIOManager;
+
         public static PubNub PubNub = null;
 
         public Configuration Configuration { get; set; }
@@ -68,15 +70,57 @@ namespace DolbyIO.Comms.Unity
         public GameObject VideoDevice;
         public GameObject ScreenShareSource;
 
+        public TextAsset jsonFile;
+
+
+        private ConfigurationLoader configLoader;
+
         void Awake()
         {
+            DolbyIOManager = GetComponent<DolbyIOManager>();
+
+           // Loading configuration
+
+
+
+            configLoader = GetComponent<ConfigurationLoader>();
+
+            configLoader.Init().Wait();
+
+            var token = configLoader.GetToken();
+
+            _sdk.InitAsync(token.Result, RefreshToken).Wait();
+
+            if (DolbyIOManager.AutoOpenSession)
+            {
+                DolbyIOManager.OpenSession();
+            }
             _participantAvatar = Resources.Load("ParticipantAvatar") as GameObject;
+        }
+
+        public string RefreshToken()
+        {
+
+            return configLoader.GetToken().Result;
         }
 
         void Start()
         {
+
+            //configLoader = GetComponent<ConfigurationLoader>();
+
+            //var token = configLoader.GetToken();
+
+            //_sdk.InitAsync(token.Result, RefreshToken).Wait();
+
+            //if (DolbyIOManager.AutoOpenSession)
+            //{
+            //    DolbyIOManager.OpenSession();
+            //}
+
             if (_sdk.IsInitialized)
             {
+                UnityEngine.Debug.Log("DolbyIOSDK Initialized");
                 _sdk.Conference.VideoTrackAdded = HandleVideoTrackAdded;
                 _sdk.Conference.VideoTrackRemoved = HandleVideoTrackRemoved;
                 _sdk.Conference.ParticipantUpdated = HandleParticipantUpdated;
@@ -89,11 +133,34 @@ namespace DolbyIO.Comms.Unity
 
             joinButton.onClick.AddListener(() =>
             {
-                var conference = Join();
-                _conferenceId = conference.Id;
-                Init(conference.Id);
+                //var conference = Join();
+                //_conferenceId = conference.Id;
+                //UnityEngine.Debug.Log("ID: " + conference.Id);
+                //Init(conference.Id);
 
             });
+        }
+
+        public IEnumerator JoinCoroutine()
+        {
+            var conference = Join();
+            _conferenceId = conference.Id;
+            UnityEngine.Debug.Log("ID: " + conference.Id);
+            Init(conference.Id);
+
+            // Simulating a delay of 2 seconds for demonstration purposes
+            yield return new WaitForSeconds(2);
+
+            // Connection completed
+        }
+
+        public IEnumerator LeaveCoroutine()
+        {
+            Leave();
+            // Simulating a delay of 2 seconds for demonstration purposes
+            yield return new WaitForSeconds(2);
+
+            // Disconnection completed
         }
 
         public async Task Init(string conferenceId)
@@ -402,6 +469,7 @@ namespace DolbyIO.Comms.Unity
         {
             if (ParticipantStatus.OnAir == p.Status && _sdk.Session.User.Id != p.Id)
             {
+                UnityEngine.Debug.Log("OnParticipantAdded: " + p.Info.Name + " " + p.Id + " " + _sdk.Session.User.Id);
                 AddParticipant(p);
                 UpdateVideoControllers().ContinueWith(t =>
                 {
@@ -411,6 +479,7 @@ namespace DolbyIO.Comms.Unity
             }
             else if (ParticipantStatus.Left == (p.Status))
             {
+                UnityEngine.Debug.Log("OnParticipantRemoved: " + p.Info.Name + " " + p.Id + " " + _sdk.Session.User.Id);
                 RemoveParticipant(p.Id);
             }
         }

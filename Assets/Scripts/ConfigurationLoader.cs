@@ -25,7 +25,7 @@ public class ConfigurationLoader : MonoBehaviour
 
     private HttpClient _client = new HttpClient();
 
-    private async Task<string> GetToken()
+    public async Task<string> GetToken()
     {
         return await Task.Run(async () =>
         {
@@ -38,10 +38,12 @@ public class ConfigurationLoader : MonoBehaviour
 
                 var token = JsonConvert.DeserializeObject<TokenJson>(jsonString);
                 result = token.access_token;
+                Debug.Log("Grabbed TokenServerURL successfully");
             }
             else
             {
                 result = Configuration.ClientAccessToken;
+                Debug.Log("Grabbed ClientAccessToken successfully");
             }
 
             if (String.IsNullOrEmpty(result))
@@ -56,6 +58,23 @@ public class ConfigurationLoader : MonoBehaviour
 
     void Awake()
     {
+        //// Loading configuration
+        //try
+        //{
+        //    Configuration = Configuration.LoadTextAsset(jsonFile.text);
+        //    TestConferenceController.Configuration = Configuration;
+        //}
+        //catch (Exception e)
+        //{
+        //    Debug.LogError($"Failed to load configuration file: {e.Message}");
+        //}
+
+
+
+    }
+
+    public async Task Init()
+    {
         // Loading configuration
         try
         {
@@ -66,9 +85,9 @@ public class ConfigurationLoader : MonoBehaviour
         {
             Debug.LogError($"Failed to load configuration file: {e.Message}");
         }
-
-
-
     }
+
+
+
 
 }

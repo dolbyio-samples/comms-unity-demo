@@ -13431,7 +13431,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1659611296}
   - component: {fileID: 1659611295}
-  - component: {fileID: 1659611294}
   - component: {fileID: 1659611298}
   - component: {fileID: 1659611297}
   m_Layer: 0
@@ -13441,20 +13440,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1659611294
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1659611292}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 136744cd1f22b4cba8c59b82c9540044, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  AppKey: xCE3aCOG7gtdlgjiUdtAUQ==
-  AppSecret: NVqxTs0vwuDHRFcsASgcHsT93veiK6ly2kNOAsib77E=
 --- !u!114 &1659611295
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13508,7 +13493,6 @@ MonoBehaviour:
   AutoJoin: 0
   VideoDevice: {fileID: 1632236133}
   ScreenShareSource: {fileID: 473231417}
-  jsonFile: {fileID: 0}
 --- !u!114 &1659611298
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -31,7 +31,6 @@ using System.Security.Cryptography;
         void Start()
         {
             TestConferenceController controller = GetComponent<TestConferenceController>();
-          // controller.onInformationReady += Init;
         }
 
         public void Init(string conferenceId)

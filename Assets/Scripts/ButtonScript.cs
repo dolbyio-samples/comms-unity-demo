@@ -10,11 +10,8 @@ public class ButtonScript : MonoBehaviour
 {
     public GameObject progressIndicator; // Reference to the join progress indicator panel
     public TextMeshProUGUI progressText; // Reference to the TextMeshProUGUI component
-    public Button joinButton;
-
-  //  public GameObject leaveProgressIndicator; // Reference to the join progress indicator panel
-//    public TextMeshProUGUI leaveProgressText; // Reference to the TextMeshProUGUI component
-    public Button leaveButton;
+    public Button joinButton; // Reference to the join button
+    public Button leaveButton; // Reference to the leave button
 
     public TestConferenceController TestConferenceController; // Reference to the TestConferenceController script
     private static bool isConnected = false; // Flag to track if the user is already connected
@@ -24,18 +21,18 @@ public class ButtonScript : MonoBehaviour
         if (!isConnected)
         {
             // Disable the button
-            GetComponent<Button>().interactable = false;
+            joinButton.interactable = false;
 
             // Show the progress indicator
             progressIndicator.SetActive(true);
             progressText.text = "Connecting...";
 
             // Simulate connecting to the game (replace with your actual connection logic)
-            StartCoroutine(ConnectToGame());
+            StartCoroutine(ConnectToConference());
         }
     }
 
-    private IEnumerator ConnectToGame()
+    private IEnumerator ConnectToConference()
     {
         yield return TestConferenceController.JoinCoroutine();
 

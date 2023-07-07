@@ -47,8 +47,6 @@ namespace DolbyIO.Comms.Unity
         [SerializeField]
         private string _conferenceAlias;
 
-        //public event Action<Task> onInformationReady;
-
         [SerializeField]
         private Button joinButton;
 
@@ -70,9 +68,6 @@ namespace DolbyIO.Comms.Unity
         public GameObject VideoDevice;
         public GameObject ScreenShareSource;
 
-        public TextAsset jsonFile;
-
-
         private ConfigurationLoader configLoader;
 
         void Awake()
@@ -80,8 +75,6 @@ namespace DolbyIO.Comms.Unity
             DolbyIOManager = GetComponent<DolbyIOManager>();
 
            // Loading configuration
-
-
 
             configLoader = GetComponent<ConfigurationLoader>();
 
@@ -106,17 +99,6 @@ namespace DolbyIO.Comms.Unity
 
         void Start()
         {
-
-            //configLoader = GetComponent<ConfigurationLoader>();
-
-            //var token = configLoader.GetToken();
-
-            //_sdk.InitAsync(token.Result, RefreshToken).Wait();
-
-            //if (DolbyIOManager.AutoOpenSession)
-            //{
-            //    DolbyIOManager.OpenSession();
-            //}
 
             if (_sdk.IsInitialized)
             {
@@ -148,7 +130,7 @@ namespace DolbyIO.Comms.Unity
             UnityEngine.Debug.Log("ID: " + conference.Id);
             Init(conference.Id);
 
-            // Simulating a delay of 2 seconds for demonstration purposes
+            // Simulating a delay of 2 seconds
             yield return new WaitForSeconds(2);
 
             // Connection completed
@@ -157,7 +139,7 @@ namespace DolbyIO.Comms.Unity
         public IEnumerator LeaveCoroutine()
         {
             Leave();
-            // Simulating a delay of 2 seconds for demonstration purposes
+            // Simulating a delay of 2 seconds
             yield return new WaitForSeconds(2);
 
             // Disconnection completed
@@ -231,15 +213,6 @@ namespace DolbyIO.Comms.Unity
 
                 Conference conference = _sdk.Conference.CreateAsync(options).Result;
                 Conference joinedConference = _sdk.Conference.JoinAsync(conference, joinOpts).Result;
-
-               // string information = conference.Id;
-
-                //PubNubInitializer.Init(information);
-
-                //onInformationReady?.Invoke(information);
-    
-
-                // set conference id here
 
                 _sdk.Conference.SetSpatialEnvironmentAsync
                 (

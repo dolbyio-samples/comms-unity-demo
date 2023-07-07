@@ -58,19 +58,7 @@ public class ConfigurationLoader : MonoBehaviour
 
     void Awake()
     {
-        //// Loading configuration
-        //try
-        //{
-        //    Configuration = Configuration.LoadTextAsset(jsonFile.text);
-        //    TestConferenceController.Configuration = Configuration;
-        //}
-        //catch (Exception e)
-        //{
-        //    Debug.LogError($"Failed to load configuration file: {e.Message}");
-        //}
-
-
-
+ 
     }
 
     public async Task Init()

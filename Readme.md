@@ -1,3 +1,5 @@
+# :warning: This repository is no longer maintained :warning:
+
 ## Dolby.io Virtual World plugin for Unity Demo
 
 This repository contains a demo application that uses the [Dolby.io Virtual World plugin for Unity](https://github.com/DolbyIO/comms-sdk-unity). 
